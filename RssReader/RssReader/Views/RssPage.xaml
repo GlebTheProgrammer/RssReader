@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RssReader.Views.RssPage"
+             xmlns:conv="clr-namespace:Helpers.Converters"
+             xmlns:i18n="clr-namespace:RssReader.Helpers"
+             xmlns:h="clr-namespace:Helpers"
+             BackgroundColor="{StaticResource clrBackground}"
+             Title="{Binding Title}"
+             x:Name="pRss">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+            <conv:DateTimeConverter x:Key="DTConv"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding Messages}" 
+                  IsPullToRefreshEnabled="True"
+                  RefreshCommand="{Binding cmdRefresh}"
+                  IsRefreshing="{Binding IsBusy}"
+                  HasUnevenRows="True" RowHeight="-1"
+                  SelectionMode="None">
+            <ListView.Behaviors>
+                <h:EventToCommandBehavior EventName="ItemTapped" Command="{Binding cmdSelect}" 
+                                          EventArgsConverter="{StaticResource ItemTappedConverter}" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <StackLayout Margin="8,0" VerticalOptions="Center">
+                                <Label Text="{Binding Title}" LineBreakMode="WordWrap" 
+                                       Style="{StaticResource AccentText}"/>
+                                <Label Text="{Binding Text}"  LineBreakMode="WordWrap"/>
+                                <Label Text="{Binding Date, Converter={StaticResource DTConv}}" HorizontalOptions="End" 
+                                       Style="{StaticResource LightText}" Margin="0,0,0,12"/>
+                            </StackLayout>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
